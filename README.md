@@ -1,73 +1,112 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# Blog Website Backend - NestJS
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## Introduction
+This project is the backend API for a blog website, built using NestJS and Prisma with PostgreSQL as the database.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Prerequisites
 
-## Description
+Before running the project, ensure you have the following installed:
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- [Node.js](https://nodejs.org/) (version 14+)
+- [Yarn](https://yarnpkg.com/)
+- [PostgreSQL](https://www.postgresql.org/)
+- A code editor like [VS Code](https://code.visualstudio.com/)
 
-## Installation
+## Project Setup
+
+### 1. Clone the repository
+
+First, clone the project from the repository to your local machine:
 
 ```bash
-$ yarn install
+git clone git@github.com:rahul7840/blog-site-backend.git
+cd blog-site-backend
+yarn install
 ```
 
-## Running the app
+### 2. Create the `.env` file
+
+In the root directory of the project, create a `.env` file to configure your environment variables. The content of the `.env` file should look like this:
+
+```env
+DATABASE_URL="postgresql://postgres:password@localhost:5432/postgres?schema=blogWeb"
+
+ACCESS_TOKEN_SECRET_EXPIRE=10800          # 3 hours for access token to expire
+REFRESH_TOKEN_SECRET_EXPIRE=2592000       # Refresh token expiry
+JWT_EXPIRES_IN=365d                       # JWT expiration set to 365 days
+```
+
+Ensure that the `DATABASE_URL` matches your local PostgreSQL configuration.
+
+### 3. Set up the Database
+
+After configuring the `.env` file, run the following command to initialize the database using Prisma migrations:
 
 ```bash
-# development
-$ yarn run start
-
-# watch mode
-$ yarn run start:dev
-
-# production mode
-$ yarn run start:prod
+npx prisma migrate dev --name init
 ```
 
-## Test
+This command will apply the database migrations based on the Prisma schema.
+
+### 4. Run the Project in Development Mode
+
+Start the application in development mode using:
 
 ```bash
-# unit tests
-$ yarn run test
-
-# e2e tests
-$ yarn run test:e2e
-
-# test coverage
-$ yarn run test:cov
+yarn run start:dev
 ```
 
-## Support
+This will start your NestJS application, and you should see the following message:
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+```
+Server is running on port 4040...
+```
 
-## Stay in touch
+### 5. Access the API
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+Once the server is running, you can visit the API locally in your browser or API client at:
 
-## License
+```
+http://localhost:4040/api
+```
 
-Nest is [MIT licensed](LICENSE).
+## Additional Information
+
+- **Access Token Expiry**: 3 hours (`ACCESS_TOKEN_SECRET_EXPIRE`)
+- **Refresh Token Expiry**: 30 days (`REFRESH_TOKEN_SECRET_EXPIRE`)
+- **JWT Expiration**: 1 year (`JWT_EXPIRES_IN`)
+
+---
+
+## Useful Commands
+
+- **Install dependencies**: 
+  ```bash
+  yarn install
+  ```
+
+- **Run the project**: 
+  ```bash
+  yarn run start:dev
+  ```
+
+- **Apply database migrations**: 
+  ```bash
+  npx prisma migrate dev --name init
+  ```
+
+- **Generate Prisma client**: 
+  ```bash
+  npx prisma generate
+  ```
+
+---
+
+## Troubleshooting
+
+- If your database connection fails, ensure your PostgreSQL service is running and your credentials in the `.env` file are correct.
+- If Prisma migration errors occur, try resetting the database by running:
+
+  ```bash
+  npx prisma migrate reset
+  ```
