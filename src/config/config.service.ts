@@ -32,10 +32,4 @@ export class AppConfigService {
         return this.get<number>('app.port');
     }
 
-    get apiKey() {
-        return this.get<string>('app.api_key');
-    }
-    get apiSecret() {
-        return this.get<string>('app.api_secret');
-    }
 }
