@@ -29,7 +29,6 @@ export class CommentsController {
     constructor(private readonly commentService: CommentsService) {}
 
     @Get('list')
-    @ApiTags('Blog-Post')
     @ApiBearerAuth()
     @UseGuards(JwtAuthGuard)
     @ApiQuery({ name: 'page', required: false })
@@ -47,7 +46,7 @@ export class CommentsController {
         description: ApiError.BAD_REQUEST,
     })
     @ApiOperation({
-        summary: 'get only MY COMMENTS',
+        summary: 'List only my COMMENTS',
         description: 'get only MY COMMENTS',
     })
     async allDevices(
@@ -79,7 +78,7 @@ export class CommentsController {
         description: ApiError.BAD_REQUEST,
     })
     @ApiOperation({
-        summary: 'Add comment on Post',
+        summary: 'Add your comment on Post',
         description: 'Add comment on Post',
     })
     async addPost(
@@ -111,7 +110,7 @@ export class CommentsController {
         description: ApiError.BAD_REQUEST,
     })
     @ApiOperation({
-        summary: 'Delete comments',
+        summary: 'Delete your comments',
         description: 'Delete comments',
     })
     async Delete(@Param('commentId') id: string, @Request() req) {

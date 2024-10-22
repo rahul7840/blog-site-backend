@@ -7,7 +7,7 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .addBearerAuth()
-    .setTitle('Blog site System API')
+    .setTitle('Blog post website API')
     .setDescription('Here is the API for blog website')
     .setVersion('1.0')
     .build();

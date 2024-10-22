@@ -70,8 +70,8 @@ export class PostsController {
         description: ApiError.BAD_REQUEST,
     })
     @ApiOperation({
-        summary: 'Search blog using TITLE only ',
-        description: 'Search blog using TITLE only',
+        summary: 'Search post using TITLE only ',
+        description: 'Search post using TITLE only',
     })
     @ApiQuery({ name: 'page', required: false })
     @ApiQuery({ name: 'limit', required: false })
@@ -104,7 +104,7 @@ export class PostsController {
         description: ApiError.BAD_REQUEST,
     })
     @ApiOperation({
-        summary: 'Add blog to the website',
+        summary: 'Add blog-post to the website',
         description: 'Add blog to the website',
     })
     async addPost(@Body() dto: AddPost, @Request() req) {
@@ -112,7 +112,7 @@ export class PostsController {
         return await this.postService.addPost(dto, userId);
     }
 
-    @Patch('/:id')
+    @Patch(':id')
     @ApiTags('Blog-Post')
     @ApiBearerAuth()
     @UseGuards(JwtAuthGuard)
@@ -133,8 +133,8 @@ export class PostsController {
         description: ApiError.BAD_REQUEST,
     })
     @ApiOperation({
-        summary: 'Update blog to the website',
-        description: 'Update blog to the website',
+        summary: 'Update blog-post to the website',
+        description: 'Update blog-post to the website',
     })
     async update(
         @Body() dto: UpdatePost,
@@ -145,7 +145,7 @@ export class PostsController {
         return await this.postService.updatePost(dto, id, userId);
     }
 
-    @Delete('/:id')
+    @Delete(':id')
     @ApiTags('Blog-Post')
     @ApiBearerAuth()
     @UseGuards(JwtAuthGuard)
@@ -166,8 +166,8 @@ export class PostsController {
         description: ApiError.BAD_REQUEST,
     })
     @ApiOperation({
-        summary: 'Update blog to the website',
-        description: 'Update blog to the website',
+        summary: 'Delete blog-post to the website',
+        description: 'Delete blog-post to the website',
     })
     async Delete(@Param('id') id: string, @Request() req) {
         const userId = req.user.id;
