@@ -9,9 +9,16 @@ import { HttpExceptionFilter } from './common/filter/http.exception.filter';
 import { AuthModule } from './module/auth/auth.module';
 import { PostsModule } from './module/posts/posts.module';
 import { AppConfigModule } from './config/config.module';
+import { CommentsModule } from './module/comments/comments.module';
 
 @Module({
-    imports: [PrismaModule, AuthModule, PostsModule, AppConfigModule],
+    imports: [
+        PrismaModule,
+        AuthModule,
+        PostsModule,
+        CommentsModule,
+        AppConfigModule,
+    ],
     controllers: [AppController],
     providers: [
         { provide: APP_INTERCEPTOR, useClass: ResponseInterceptor },

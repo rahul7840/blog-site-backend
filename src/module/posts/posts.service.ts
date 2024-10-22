@@ -2,7 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { AddPost } from './dto/add.post.dto';
 import { UpdatePost } from './dto/update.post.dto';
-import { pid } from 'process';
+import { pid, title } from 'process';
 import { utils } from 'src/common/helper/utils';
 
 @Injectable()
@@ -22,18 +22,26 @@ export class PostsService {
 
         if (!checkUser) throw new BadRequestException('user not found');
 
-        await this.prismaService.$transaction(async (prisma) => {
-            const post = await prisma.post.create({
-                data: {
-                    title: dto.title,
-                    content: dto.content,
-                    user_id: userId,
-                },
-            });
-            return post;
-        });
+        const postData = await this.prismaService.$transaction(
+            async (prisma) => {
+                const post = await prisma.post.create({
+                    data: {
+                        title: dto.title,
+                        content: dto.content,
+                        user_id: userId,
+                    },
+                });
+                return {
+                    id: post.id,
+                    title: post.title,
+                    content: post.content,
+                    date_of_post: post.date_of_post,
+                    user_id: post.user_id,
+                };
+            },
+        );
 
-        return { message: 'Post successfully Added' };
+        return postData;
     }
 
     async updatePost(dto: UpdatePost, id: string, userId: string) {
@@ -70,7 +78,14 @@ export class PostsService {
 
         if (!UpdatePost) throw new BadRequestException('unable to update');
 
-        return UpdatePost;
+        const response = {
+            id: UpdatePost.id,
+            title: UpdatePost.title,
+            content: UpdatePost.content,
+            user_id: UpdatePost.user_id,
+        };
+
+        return response;
     }
     async getAllPost(page = 1, limit = 10) {
         const { skip, take } = this.utils.calculatePagination(page, limit);
@@ -91,7 +106,14 @@ export class PostsService {
                 },
                 Comment: {
                     select: {
+                        id: true,
                         content: true,
+                        User: {
+                            select: {
+                                name: true,
+                                id: true,
+                            },
+                        },
                     },
                 },
             },
@@ -99,7 +121,21 @@ export class PostsService {
             skip,
         });
 
-        return result;
+        const formattedResult = result.map((post) => ({
+            id: post.id,
+            title: post.title,
+            content: post.content,
+            date_of_post: post.date_of_post,
+            author_name: post.User.name,
+            comments: post.Comment.map((comment) => ({
+                comment_id: comment.id,
+                user_id: comment.User.id,
+                name: comment.User.name,
+                comment: comment.content,
+            })),
+        }));
+
+        return formattedResult;
     }
     async delete(id: string, userId: string) {
         const [checkUser, checkPost] = await Promise.all([
@@ -134,6 +170,11 @@ export class PostsService {
 
         if (!DeletePost) throw new BadRequestException('unable to Delete post');
 
-        return DeletePost;
+        const response = {
+            id: DeletePost.id,
+            title: DeletePost.title,
+            is_deleted: DeletePost.isDeleted,
+        };
+        return response;
     }
 }
