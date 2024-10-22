@@ -34,6 +34,7 @@ DATABASE_URL="postgresql://postgres:password@localhost:5432/postgres?schema=blog
 ACCESS_TOKEN_SECRET_EXPIRE=10800          # 3 hours for access token to expire
 REFRESH_TOKEN_SECRET_EXPIRE=2592000       # Refresh token expiry
 JWT_EXPIRES_IN=365d                       # JWT expiration set to 365 days
+PORT=4040
 ```
 
 Ensure that the `DATABASE_URL` matches your local PostgreSQL configuration.
