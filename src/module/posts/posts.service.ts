@@ -44,6 +44,38 @@ export class PostsService {
         return postData;
     }
 
+    async searchPosts(title: string, page = 1, limit = 10) {
+        const skip = (page - 1) * limit;
+        const take = limit;
+
+        const posts = await this.prismaService.post.findMany({
+            where: {
+                title: {
+                    contains: title,
+                    mode: 'insensitive',
+                },
+                isDeleted: false,
+            },
+            skip,
+            take,
+        });
+
+        const total = await this.prismaService.post.count({
+            where: {
+                title: {
+                    contains: title,
+                    mode: 'insensitive',
+                },
+                isDeleted: false,
+            },
+        });
+
+        return {
+            data: posts,
+            total,
+        };
+    }
+
     async updatePost(dto: UpdatePost, id: string, userId: string) {
         const [checkUser, checkPost] = await Promise.all([
             this.prismaService.user.findFirst({
@@ -87,6 +119,7 @@ export class PostsService {
 
         return response;
     }
+
     async getAllPost(page = 1, limit = 10) {
         const { skip, take } = this.utils.calculatePagination(page, limit);
 
@@ -137,6 +170,7 @@ export class PostsService {
 
         return formattedResult;
     }
+    
     async delete(id: string, userId: string) {
         const [checkUser, checkPost] = await Promise.all([
             this.prismaService.user.findFirst({

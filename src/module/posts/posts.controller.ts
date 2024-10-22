@@ -55,6 +55,33 @@ export class PostsController {
         return await this.postService.getAllPost(page, limit);
     }
 
+    @Get('search')
+    @ApiResponse({
+        status: HttpStatus.OK,
+        description: ApiError.SUCCESS_MESSAGE,
+    })
+    @ApiResponse({
+        status: HttpStatus.INTERNAL_SERVER_ERROR,
+        description: ApiError.INTERNAL_SERVER_ERROR_MESSAGE,
+    })
+    @ApiResponse({
+        status: HttpStatus.BAD_REQUEST,
+        description: ApiError.BAD_REQUEST,
+    })
+    @ApiOperation({
+        summary: 'List all blogs for all users with pagination',
+        description: 'List all blogs for all users with pagination',
+    })
+    @ApiQuery({ name: 'page', required: false })
+    @ApiQuery({ name: 'limit', required: false })
+    async search(
+        @Query('title') title: string,
+        @Query('page') page = 1,
+        @Query('limit') limit = 10,
+    ) {
+        return this.postService.searchPosts(title, page, limit);
+    }
+
     @Post()
     @ApiBearerAuth()
     @UseGuards(JwtAuthGuard)
