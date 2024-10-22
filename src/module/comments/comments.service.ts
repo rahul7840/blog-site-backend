@@ -1,10 +1,15 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { AddCommentsDto } from './dto/add.cmts.dto';
 import { PrismaService } from '../prisma/prisma.service';
+import { utils } from 'src/common/helper/utils';
+import { response } from 'express';
 
 @Injectable()
 export class CommentsService {
-    constructor(private readonly prismaService: PrismaService) {}
+    constructor(
+        private readonly prismaService: PrismaService,
+        private readonly utils: utils,
+    ) {}
     async addcmts(dto: AddCommentsDto, id: string, userId: string) {
         const checkUser = await this.prismaService.user.findFirst({
             where: {
@@ -15,7 +20,7 @@ export class CommentsService {
 
         if (!checkUser) throw new BadRequestException('user not found');
 
-        await this.prismaService.comment.create({
+        const result = await this.prismaService.comment.create({
             data: {
                 content: dto.comment,
                 user_id: userId,
@@ -23,7 +28,13 @@ export class CommentsService {
             },
         });
 
-        return { message: 'Comments on this Post successfully Added' };
+        const response = {
+            comment_id: result.id,
+            post_id: result.post_id,
+            comment: result.content,
+        };
+
+        return response;
     }
 
     async delete(id: string, userId: string) {
@@ -61,5 +72,18 @@ export class CommentsService {
             user_id: DeleteComment.user_id,
         };
         return response;
+    }
+
+    async getMyCmts(page = 1, limit = 10, userId: string) {
+        const { skip, take } = this.utils.calculatePagination(page, limit);
+
+        const result = await this.prismaService.comment.findMany({
+            where: {
+                user_id: userId,
+            },
+            skip,
+            take,
+        });
+        return result;
     }
 }

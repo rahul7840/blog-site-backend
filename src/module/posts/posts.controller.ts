@@ -25,11 +25,11 @@ import { AddPost } from './dto/add.post.dto';
 import { UpdatePost } from './dto/update.post.dto';
 
 @Controller('posts')
-@ApiTags('Blog-Post')
 export class PostsController {
     constructor(private readonly postService: PostsService) {}
 
     @Get('list')
+    @ApiTags('Blog-Post')
     @ApiQuery({ name: 'page', required: false })
     @ApiQuery({ name: 'limit', required: false })
     @ApiResponse({
@@ -56,6 +56,7 @@ export class PostsController {
     }
 
     @Get('search')
+    @ApiTags('Search')
     @ApiResponse({
         status: HttpStatus.OK,
         description: ApiError.SUCCESS_MESSAGE,
@@ -69,8 +70,8 @@ export class PostsController {
         description: ApiError.BAD_REQUEST,
     })
     @ApiOperation({
-        summary: 'List all blogs for all users with pagination',
-        description: 'List all blogs for all users with pagination',
+        summary: 'Search blog using TITLE only ',
+        description: 'Search blog using TITLE only',
     })
     @ApiQuery({ name: 'page', required: false })
     @ApiQuery({ name: 'limit', required: false })
@@ -83,6 +84,7 @@ export class PostsController {
     }
 
     @Post()
+    @ApiTags('Blog-Post')
     @ApiBearerAuth()
     @UseGuards(JwtAuthGuard)
     @ApiResponse({
@@ -111,6 +113,7 @@ export class PostsController {
     }
 
     @Patch('/:id')
+    @ApiTags('Blog-Post')
     @ApiBearerAuth()
     @UseGuards(JwtAuthGuard)
     @ApiResponse({
@@ -143,6 +146,7 @@ export class PostsController {
     }
 
     @Delete('/:id')
+    @ApiTags('Blog-Post')
     @ApiBearerAuth()
     @UseGuards(JwtAuthGuard)
     @ApiResponse({

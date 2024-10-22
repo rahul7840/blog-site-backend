@@ -2,9 +2,11 @@ import {
     Body,
     Controller,
     Delete,
+    Get,
     HttpStatus,
     Param,
     Post,
+    Query,
     Request,
     UseGuards,
 } from '@nestjs/common';
@@ -14,6 +16,7 @@ import {
     ApiResponse,
     ApiOperation,
     ApiTags,
+    ApiQuery,
 } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
 import { ApiError } from 'src/common/helper/error_description';
@@ -24,6 +27,37 @@ import { CommentsService } from './comments.service';
 @ApiTags('Comments')
 export class CommentsController {
     constructor(private readonly commentService: CommentsService) {}
+
+    @Get('list')
+    @ApiTags('Blog-Post')
+    @ApiBearerAuth()
+    @UseGuards(JwtAuthGuard)
+    @ApiQuery({ name: 'page', required: false })
+    @ApiQuery({ name: 'limit', required: false })
+    @ApiResponse({
+        status: HttpStatus.OK,
+        description: ApiError.SUCCESS_MESSAGE,
+    })
+    @ApiResponse({
+        status: HttpStatus.INTERNAL_SERVER_ERROR,
+        description: ApiError.INTERNAL_SERVER_ERROR_MESSAGE,
+    })
+    @ApiResponse({
+        status: HttpStatus.BAD_REQUEST,
+        description: ApiError.BAD_REQUEST,
+    })
+    @ApiOperation({
+        summary: 'get only MY COMMENTS',
+        description: 'get only MY COMMENTS',
+    })
+    async allDevices(
+        @Query('page') page: number = 1,
+        @Query('limit') limit: number = 10,
+        @Request() req,
+    ) {
+        const userId = req.user.id;
+        return await this.commentService.getMyCmts(page, limit, userId);
+    }
 
     @Post(':postId')
     @ApiBearerAuth()
