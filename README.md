@@ -19,8 +19,8 @@ Before running the project, ensure you have the following installed:
 First, clone the project from the repository to your local machine:
 
 ```bash
-git clone <repository-url>
-cd <project-folder>
+git clone git@github.com:rahul7840/blog-site-backend.git
+cd blog-site-backend
 yarn install
 ```
 
