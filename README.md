@@ -48,7 +48,17 @@ npx prisma migrate dev --name init
 
 This command will apply the database migrations based on the Prisma schema.
 
-### 4. Run the Project in Development Mode
+### 4. Seed the Database with Dummy Data
+
+To populate your database with dummy blog posts, run the seed script:
+
+```bash
+yarn seed
+```
+
+This will create sample blog posts in the database for testing purposes.
+
+### 5. Run the Project in Development Mode
 
 Start the application in development mode using:
 
@@ -62,7 +72,7 @@ This will start your NestJS application, and you should see the following messag
 Server is running on port 4040...
 ```
 
-### 5. Access the API
+### 6. Access the API
 
 Once the server is running, you can visit the API locally in your browser or API client at:
 
@@ -100,6 +110,11 @@ http://localhost:4040/api
   npx prisma generate
   ```
 
+- **Seed the database**: 
+  ```bash
+  yarn seed
+  ```
+
 ---
 
 ## Troubleshooting
@@ -110,3 +125,5 @@ http://localhost:4040/api
   ```bash
   npx prisma migrate reset
   ```
+
+---
