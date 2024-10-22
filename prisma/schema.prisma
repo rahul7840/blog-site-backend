@@ -12,33 +12,34 @@ model User {
   name          String
   email         String    @unique
   password      String
-  posts         Post[]
   access_token  String?
   refresh_token String?
   isDeleted     Boolean   @default(false)
-  comments      Comment[]
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  created_at    DateTime  @default(now())
+  updated_at    DateTime  @updatedAt
+  Post          Post[]
+  Comment       Comment[]
 }
 
 model Post {
-  id        String    @id @default(uuid())
-  title     String
-  content   String
-  author    User      @relation(fields: [authorId], references: [id])
-  authorId  String
-  date      DateTime  @default(now())
-  comments  Comment[]
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  id           String    @id @default(uuid())
+  title        String
+  content      String
+  date_of_post DateTime  @default(now())
+  created_at   DateTime  @default(now())
+  updated_at   DateTime  @updatedAt
+  isDeleted    Boolean   @default(false)
+  User         User?     @relation(fields: [user_id], references: [id])
+  user_id      String?
+  Comment      Comment[]
 }
 
 model Comment {
   id        String   @id @default(uuid())
   content   String
-  post      Post     @relation(fields: [postId], references: [id])
-  postId    String
-  author    User     @relation(fields: [authorId], references: [id])
-  authorId  String
   createdAt DateTime @default(now())
+  Post      Post?    @relation(fields: [post_id], references: [id])
+  post_id   String
+  User      User?    @relation(fields: [user_id], references: [id])
+  user_id   String?
 }
