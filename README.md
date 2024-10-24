@@ -3,6 +3,13 @@
 ## Introduction
 This project is the backend API for a blog website, built using NestJS and Prisma with PostgreSQL as the database.
 
+## Hosted URL
+You can access the project at the following URL:
+
+http://91.108.110.99:4040/api
+
+If the URL is not accessible, you may need to set up the project locally by following the setup instructions provided below.
+
 ## Prerequisites
 
 Before running the project, ensure you have the following installed:
